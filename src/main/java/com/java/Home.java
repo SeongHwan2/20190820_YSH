@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.java.hdfs.Hadoop;
 
-@WebServlet("/20190820_YSH/Home")
+@WebServlet("/Home")
 public class Home extends HttpServlet {
 	
 	// 시작 화면 출력
