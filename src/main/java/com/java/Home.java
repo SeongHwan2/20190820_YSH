@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.java.hdfs.Hadoop;
 
-@WebServlet("/Home")
+@WebServlet("/hdfs-test/Home")
 public class Home extends HttpServlet {
 	
 	// 시작 화면 출력
