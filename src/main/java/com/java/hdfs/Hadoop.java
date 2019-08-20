@@ -23,7 +23,7 @@ public class Hadoop {
 	protected Configuration localConf = null;
 	// hadoop 접속 주소 (hadoop server ip 수정 할것) <<<<<<<<<<<<<<<<<<
 	protected final String URL = "hdfs://192.168.3.124:9000";
-	protected final String LOCAL = "/root/data/";
+	protected final String LOCAL = "C:\\Users\\GD7\\Desktop\\data\\";
 	// hadoop 정제 대상 경로 / 처리 결과 저장 경로 및 파일
 	protected final String INPUT = "/input/";
 	protected final String OUTPUT = "/output";
@@ -56,7 +56,6 @@ public class Hadoop {
 			try {
 				fileCopy(fileName);
 				mapReduser();
-				resultData();
 				status = 2;
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -65,14 +64,24 @@ public class Hadoop {
 		}else {
 			status = 0;
 		}
+		String data = null;
+		if(status == 2) {
+			try {
+				 data = resultData();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		resultMap.put("status", status);
+		resultMap.put("data" , data);
 		System.out.println("Hadoop.run() >> End");
 		return resultMap;
 	}
 	
 	// Hadoop 시스템 접속 기본 정의 요청 메소드
 	protected boolean init(String fileName) {
+		
 		System.out.println("Hadoop.init() >> Start");
 		boolean status = true;
 		try {
@@ -126,6 +135,11 @@ public class Hadoop {
 	// Hadoop 정제 요청 메소드
 	protected boolean mapReduser() throws ClassNotFoundException, IOException, InterruptedException {
 		System.out.println("Hadoop.mapReduser() >> Start");
+		
+		if(hadoopSystem.exists(new Path("/output"))) {
+			hadoopSystem.delete(new Path("/output"), true);
+		}
+		
 		// 정제 작업 객체 변수
 		Job job = Job.getInstance(hadoopConf, "test");
 		// 실행 대상 클래스 지정
@@ -164,7 +178,7 @@ public class Hadoop {
 			int byteRead = 0;
 			while((byteRead = fsis.read()) > 0) { 
 				// 정제 결과를 문자열 변수에 담기
-				sb.append(byteRead);
+				sb.append((char)byteRead);
 			}
 			fsis.close();
 		}

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.java.hdfs.Hadoop;
 
-@WebServlet("/Home")
+@WebServlet("/hdfs-test/Home")
 public class Home extends HttpServlet {
 	
 	// 시작 화면 출력
@@ -34,7 +34,7 @@ public class Home extends HttpServlet {
 		} else {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			Hadoop hd = new Hadoop();
-			HashMap<String, Object> result = hd.run(file_name);
+			String result = hd.run(file_name).get("data").toString();
 			req.setAttribute("file_name", file_name);
 			req.setAttribute("result", result);
 			RequestDispatcher rd = req.getRequestDispatcher(viewPath("result"));
