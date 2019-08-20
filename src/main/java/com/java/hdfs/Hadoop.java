@@ -22,8 +22,8 @@ public class Hadoop {
 	protected Configuration hadoopConf = null;
 	protected Configuration localConf = null;
 	// hadoop 접속 주소 (hadoop server ip 수정 할것) <<<<<<<<<<<<<<<<<<
-	protected final String URL = "hdfs://ip:9000";
-	protected final String LOCAL = "/root/data/";
+	protected final String URL = "hdfs://192.168.3.124:9000";
+	protected final String LOCAL = "/root/data";
 	// hadoop 정제 대상 경로 / 처리 결과 저장 경로 및 파일
 	protected final String INPUT = "/input/";
 	protected final String OUTPUT = "/output";
@@ -41,19 +41,31 @@ public class Hadoop {
 		resultMap = new HashMap<String, Object>();
 		int status = 0;
 		// Hadoop 시스템 접속 하기 위하여 확인 요청
+		/**************************************************
+		 * >> 상태값 설정 << 
+		 * 0 : 접속 오류 (Hadoop 연결 문제 발생)
+		 * 1 : 정제 오류 (MapReduce 처리 문제 발생)
+		 * 2 : 처리 완료 (전체 정상 처리)
+		 * 
+		 * >> 진행 순서 <<
+		 * 1) 파일 복사 : fileCopy()
+		 * 2) 정제 요청 : mapReduser()
+		 * 3) 성공 시 결과 받기 : resultData()
+		 **************************************************/
 		if(init(fileName)) {
-			/**************************************************
-			 * >> 상태값 설정 << 
-			 * 0 : 접속 오류 (Hadoop 연결 문제 발생)
-			 * 1 : 정제 오류 (MapReduce 처리 문제 발생)
-			 * 2 : 처리 완료 (전체 정상 처리)
-			 * 
-			 * >> 진행 순서 <<
-			 * 1) 파일 복사 : fileCopy()
-			 * 2) 정제 요청 : mapReduser()
-			 * 3) 성공 시 결과 받기 : resultData()
-			 **************************************************/
+			try {
+				fileCopy(fileName);
+				mapReduser();
+				resultData();
+				status = 2;
+			}catch (Exception e) {
+				e.printStackTrace();
+				status = 1;
+			}
+		}else {
+			status = 0;
 		}
+		
 		resultMap.put("status", status);
 		System.out.println("Hadoop.run() >> End");
 		return resultMap;

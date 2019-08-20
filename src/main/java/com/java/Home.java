@@ -1,6 +1,7 @@
 package com.java;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.java.hdfs.Hadoop;
 
 @WebServlet("/Home")
 public class Home extends HttpServlet {
@@ -24,13 +27,16 @@ public class Home extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		System.out.println("Home.doPost() >> Start");
 		// 정제 요청 대상 파일명 변수
-		String file_name = req.getParameter("file_name");		
+		String file_name = req.getParameter("file_name");
 		if(file_name == null || ("").equals(file_name)) {
 			// 정제 요청 대상 파일명 값이 없으면 Home 화면 요청
 			res.sendRedirect("/Home");
 		} else {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+			Hadoop hd = new Hadoop();
+			HashMap<String, Object> result = hd.run(file_name);
 			req.setAttribute("file_name", file_name);
+			req.setAttribute("result", result);
 			RequestDispatcher rd = req.getRequestDispatcher(viewPath("result"));
 			rd.forward(req, res);
 		}
