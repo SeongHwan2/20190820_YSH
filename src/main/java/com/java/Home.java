@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.java.hdfs.Hadoop;
 
-@WebServlet("20190820_YSH/Home")
+@WebServlet("/20190820_YSH/Home")
 public class Home extends HttpServlet {
 	
 	// 시작 화면 출력
@@ -30,7 +30,7 @@ public class Home extends HttpServlet {
 		String file_name = req.getParameter("file_name");
 		if(file_name == null || ("").equals(file_name)) {
 			// 정제 요청 대상 파일명 값이 없으면 Home 화면 요청
-			res.sendRedirect("/Home");
+			res.sendRedirect("/20190820_YSH/Home");
 		} else {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			Hadoop hd = new Hadoop();
