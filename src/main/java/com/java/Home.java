@@ -30,7 +30,7 @@ public class Home extends HttpServlet {
 		String file_name = req.getParameter("file_name");
 		if(file_name == null || ("").equals(file_name)) {
 			// 정제 요청 대상 파일명 값이 없으면 Home 화면 요청
-			res.sendRedirect("/20190820_YSH/Home");
+			res.sendRedirect("/hdfs-test/Home");
 		} else {
 			// 정제 요청 대상 파일명 값이 있으면 HDFS 실행 요청 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			Hadoop hd = new Hadoop();
@@ -50,5 +50,6 @@ public class Home extends HttpServlet {
 		// 화면 파일 확장자
 		String suffix = ".jsp"; 
 		return prefix + view + suffix;
-	}
+	}	
 }
+
